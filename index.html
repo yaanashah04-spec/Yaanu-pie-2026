@@ -214,6 +214,25 @@ setTimeout(()=>spark.remove(),2000);
 }
 }
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+    const correctPassword = "1108";
+    const unlockBtn = document.getElementById("unlockBtn");
+
+    unlockBtn.addEventListener("click", function() {
+        const entered = prompt("Enter the secret passcode 💌");
+
+        if (entered === correctPassword) {
+            alert("Unlocked 💖");
+            document.body.innerHTML = "<h1 style='text-align:center;margin-top:40vh;font-family:sans-serif;color:#ff4d6d;'>Welcome Yaanu Pie 💘</h1>";
+        } else {
+            alert("Wrong passcode 😏 Try again");
+        }
+    });
+
+});
+</script>
 
 </body>
 </html>
