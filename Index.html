@@ -1,0 +1,219 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Private For Yaanu Pie 🔐</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+
+body{
+background:linear-gradient(135deg,#ff4e88,#ff6fa5,#ff94c2);
+overflow:hidden;
+color:white;
+text-align:center;
+}
+
+/* Screens */
+.screen{
+position:fixed;
+inset:0;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+padding:20px;
+transition:0.6s;
+}
+
+.hidden{opacity:0;visibility:hidden;}
+
+h1{margin-bottom:15px;}
+p{margin-bottom:20px;font-size:1rem;}
+
+/* Passcode */
+.passcode-box{
+display:flex;
+gap:12px;
+margin:20px 0;
+}
+
+.passcode-box input{
+width:55px;
+height:65px;
+font-size:1.8rem;
+text-align:center;
+border:none;
+border-radius:12px;
+outline:none;
+}
+
+@keyframes shake{
+0%{transform:translateX(0);}
+25%{transform:translateX(-8px);}
+50%{transform:translateX(8px);}
+75%{transform:translateX(-8px);}
+100%{transform:translateX(0);}
+}
+
+.shake{animation:shake 0.4s;}
+
+button{
+padding:12px 28px;
+border:none;
+border-radius:30px;
+font-size:1rem;
+cursor:pointer;
+margin:10px;
+}
+
+.next{background:white;color:#ff4e88;}
+#yesBtn{background:#ff2e63;color:white;}
+#noBtn{background:white;color:#ff2e63;position:absolute;}
+
+/* Floating hearts */
+.heart{
+position:absolute;
+font-size:20px;
+animation:float 6s linear infinite;
+opacity:0.7;
+}
+@keyframes float{
+0%{transform:translateY(100vh);}
+100%{transform:translateY(-10vh);}
+}
+
+/* Fireworks */
+.spark{
+position:absolute;
+width:6px;
+height:6px;
+border-radius:50%;
+}
+</style>
+</head>
+<body>
+
+<!-- LOCK SCREEN -->
+<div class="screen" id="lock">
+<h1>Private For Yaanu Pie 🔐</h1>
+<p>Enter the secret code to unlock our 2026 Love Story</p>
+
+<div class="passcode-box">
+<input maxlength="1" type="password" id="d1">
+<input maxlength="1" type="password" id="d2">
+<input maxlength="1" type="password" id="d3">
+<input maxlength="1" type="password" id="d4">
+</div>
+
+<button onclick="checkCode()">Unlock ❤️</button>
+</div>
+
+<!-- MAIN SCREEN -->
+<div class="screen hidden" id="main">
+<h1>Love Wrapped 2026 💖</h1>
+<p>Aryaman & Yaanu Pie — Loading something magical...</p>
+<button class="next" onclick="showQuestion()">Continue</button>
+</div>
+
+<!-- QUESTION SCREEN -->
+<div class="screen hidden" id="questionScreen">
+<h1>So Yaanu Pie… 💍</h1>
+<p>Will you be my Valentine?</p>
+<button id="yesBtn">Yes 💖</button>
+<button id="noBtn">No 🙈</button>
+</div>
+
+<!-- CELEBRATION -->
+<div class="screen hidden" id="celebration">
+<h1>🎉 SHE SAID YES 🎉</h1>
+<p>Officially My Valentine 2026 💖</p>
+<p>I promise to love you endlessly.</p>
+</div>
+
+<script>
+
+/* PASSCODE = 1108 */
+const correctCode="1108";
+
+/* Auto move between boxes */
+const inputs=document.querySelectorAll(".passcode-box input");
+inputs.forEach((input,index)=>{
+input.addEventListener("input",()=>{
+if(input.value.length===1 && index<inputs.length-1){
+inputs[index+1].focus();
+}
+});
+});
+
+/* Check Code */
+function checkCode(){
+const entered=
+d1.value+d2.value+d3.value+d4.value;
+
+if(entered===correctCode){
+document.getElementById("lock").classList.add("hidden");
+document.getElementById("main").classList.remove("hidden");
+}else{
+document.querySelector(".passcode-box").classList.add("shake");
+setTimeout(()=>{
+document.querySelector(".passcode-box").classList.remove("shake");
+},400);
+}
+}
+
+/* Continue */
+function showQuestion(){
+document.getElementById("main").classList.add("hidden");
+document.getElementById("questionScreen").classList.remove("hidden");
+}
+
+/* YES BUTTON */
+document.getElementById("yesBtn").onclick=()=>{
+document.getElementById("questionScreen").classList.add("hidden");
+document.getElementById("celebration").classList.remove("hidden");
+fireworks();
+};
+
+/* NO BUTTON RUNS */
+const noBtn=document.getElementById("noBtn");
+noBtn.onmouseover=move;
+noBtn.onclick=move;
+
+function move(){
+const x=Math.random()*(window.innerWidth-120);
+const y=Math.random()*(window.innerHeight-80);
+noBtn.style.left=x+"px";
+noBtn.style.top=y+"px";
+}
+
+/* Floating Hearts */
+setInterval(()=>{
+const heart=document.createElement("div");
+heart.className="heart";
+heart.innerHTML="❤️";
+heart.style.left=Math.random()*100+"vw";
+document.body.appendChild(heart);
+setTimeout(()=>heart.remove(),6000);
+},400);
+
+/* Fireworks */
+function fireworks(){
+for(let i=0;i<200;i++){
+const spark=document.createElement("div");
+spark.className="spark";
+spark.style.background=
+["#fff","#ff0","#0ff","#f0f","#0f0"][Math.floor(Math.random()*5)];
+spark.style.left=Math.random()*window.innerWidth+"px";
+spark.style.top=Math.random()*window.innerHeight+"px";
+document.body.appendChild(spark);
+setTimeout(()=>spark.remove(),2000);
+}
+}
+</script>
+
+</body>
+</html>
