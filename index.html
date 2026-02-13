@@ -1,246 +1,201 @@
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Private For Yaanu Pie 🔐</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+<title>For Yaanu Pie ❤️</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
-
-body{
-background:linear-gradient(135deg,#ff4e88,#ff6fa5,#ff94c2);
-overflow:hidden;
-color:white;
-text-align:center;
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family: 'Arial', sans-serif;
 }
 
-/* Screens */
-.screen{
-position:fixed;
-inset:0;
+body{
+height:100vh;
+overflow:hidden;
+background: linear-gradient(135deg,#ffdde1,#ee9ca7);
+display:flex;
+justify-content:center;
+align-items:center;
+text-align:center;
+color:#fff;
+position:relative;
+}
+
+/* Floating Hearts */
+.heart{
+position:absolute;
+font-size:20px;
+animation: floatUp linear infinite;
+pointer-events:none;
+}
+
+@keyframes floatUp{
+0%{transform:translateY(100vh);opacity:1;}
+100%{transform:translateY(-10vh);opacity:0;}
+}
+
+/* Lock Screen */
+#lockScreen{
+position:absolute;
+width:100%;
+height:100%;
 display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
-padding:20px;
-transition:0.6s;
+background:linear-gradient(135deg,#ffdde1,#ee9ca7);
+z-index:5;
 }
 
-.hidden{opacity:0;visibility:hidden;}
-
-h1{margin-bottom:15px;}
-p{margin-bottom:20px;font-size:1rem;}
-
-/* Passcode */
-.passcode-box{
-display:flex;
-gap:12px;
-margin:20px 0;
-}
-
-.passcode-box input{
-width:55px;
-height:65px;
-font-size:1.8rem;
-text-align:center;
+input{
+padding:10px;
+border-radius:20px;
 border:none;
-border-radius:12px;
-outline:none;
+margin:10px;
+text-align:center;
+font-size:16px;
 }
-
-@keyframes shake{
-0%{transform:translateX(0);}
-25%{transform:translateX(-8px);}
-50%{transform:translateX(8px);}
-75%{transform:translateX(-8px);}
-100%{transform:translateX(0);}
-}
-
-.shake{animation:shake 0.4s;}
 
 button{
-padding:12px 28px;
+padding:12px 25px;
 border:none;
-border-radius:30px;
-font-size:1rem;
+border-radius:25px;
+font-size:16px;
 cursor:pointer;
 margin:10px;
+transition:0.3s;
 }
 
-.next{background:white;color:#ff4e88;}
-#yesBtn{background:#ff2e63;color:white;}
-#noBtn{background:white;color:#ff2e63;position:absolute;}
+/* Proposal Section */
+#proposal{
+display:none;
+flex-direction:column;
+align-items:center;
+}
 
-/* Floating hearts */
-.heart{
+#yesBtn{
+background:#ff4d6d;
+color:#fff;
+}
+
+#yesBtn:hover{
+transform:scale(1.1);
+}
+
+#noBtn{
+background:#fff;
+color:#ff4d6d;
 position:absolute;
-font-size:20px;
-animation:float 6s linear infinite;
-opacity:0.7;
-}
-@keyframes float{
-0%{transform:translateY(100vh);}
-100%{transform:translateY(-10vh);}
 }
 
-/* Fireworks */
-.spark{
-position:absolute;
-width:6px;
-height:6px;
-border-radius:50%;
+#celebration{
+display:none;
+font-size:28px;
+animation: pop 1s ease forwards;
+}
+
+@keyframes pop{
+0%{transform:scale(0);}
+100%{transform:scale(1);}
 }
 </style>
 </head>
+
 <body>
 
-<!-- LOCK SCREEN -->
-<div class="screen" id="lock">
-<h1>Private For Yaanu Pie 🔐</h1>
-<p>Enter the secret code to unlock our 2026 Love Story</p>
-
-<div class="passcode-box">
-<input maxlength="1" type="password" id="d1">
-<input maxlength="1" type="password" id="d2">
-<input maxlength="1" type="password" id="d3">
-<input maxlength="1" type="password" id="d4">
+<div id="lockScreen">
+<h1>Enter Secret Passcode 💌</h1>
+<input type="password" id="passwordInput" placeholder="Enter passcode">
+<button id="unlockBtn">Unlock ❤️</button>
 </div>
 
-<button onclick="checkCode()">Unlock ❤️</button>
-</div>
-
-<!-- MAIN SCREEN -->
-<div class="screen hidden" id="main">
-<h1>Love Wrapped 2026 💖</h1>
-<p>Aryaman & Yaanu Pie — Loading something magical...</p>
-<button class="next" onclick="showQuestion()">Continue</button>
-</div>
-
-<!-- QUESTION SCREEN -->
-<div class="screen hidden" id="questionScreen">
-<h1>So Yaanu Pie… 💍</h1>
-<p>Will you be my Valentine?</p>
-<button id="yesBtn">Yes 💖</button>
+<div id="proposal">
+<h1>Yaanu Pie 💖</h1>
+<h2>Will you be my Valentine? 🌹</h2>
+<button id="yesBtn">YES 😍</button>
 <button id="noBtn">No 🙈</button>
 </div>
 
-<!-- CELEBRATION -->
-<div class="screen hidden" id="celebration">
-<h1>🎉 SHE SAID YES 🎉</h1>
-<p>Officially My Valentine 2026 💖</p>
-<p>I promise to love you endlessly.</p>
+<div id="celebration">
+🎉 SHE SAID YES!!! 🎉<br>
+You just made 2026 the best year ever ❤️
 </div>
 
 <script>
 
-/* PASSCODE = 1108 */
-const correctCode="1108";
+/* PASSCODE */
+document.getElementById("unlockBtn").addEventListener("click",function(){
+const correctPassword="1108";
+const entered=document.getElementById("passwordInput").value;
 
-/* Auto move between boxes */
-const inputs=document.querySelectorAll(".passcode-box input");
-inputs.forEach((input,index)=>{
-input.addEventListener("input",()=>{
-if(input.value.length===1 && index<inputs.length-1){
-inputs[index+1].focus();
-}
-});
-});
-
-/* Check Code */
-function checkCode(){
-const entered=
-d1.value+d2.value+d3.value+d4.value;
-
-if(entered===correctCode){
-document.getElementById("lock").classList.add("hidden");
-document.getElementById("main").classList.remove("hidden");
+if(entered===correctPassword){
+document.getElementById("lockScreen").style.display="none";
+document.getElementById("proposal").style.display="flex";
 }else{
-document.querySelector(".passcode-box").classList.add("shake");
-setTimeout(()=>{
-document.querySelector(".passcode-box").classList.remove("shake");
-},400);
+alert("Wrong passcode 😏");
 }
-}
+});
 
-/* Continue */
-function showQuestion(){
-document.getElementById("main").classList.add("hidden");
-document.getElementById("questionScreen").classList.remove("hidden");
-}
-
-/* YES BUTTON */
-document.getElementById("yesBtn").onclick=()=>{
-document.getElementById("questionScreen").classList.add("hidden");
-document.getElementById("celebration").classList.remove("hidden");
-fireworks();
-};
-
-/* NO BUTTON RUNS */
+/* NO BUTTON RUNS AWAY */
 const noBtn=document.getElementById("noBtn");
-noBtn.onmouseover=move;
-noBtn.onclick=move;
+noBtn.addEventListener("mouseover",moveButton);
+noBtn.addEventListener("click",moveButton);
 
-function move(){
-const x=Math.random()*(window.innerWidth-120);
-const y=Math.random()*(window.innerHeight-80);
+function moveButton(){
+const x=Math.random()* (window.innerWidth-100);
+const y=Math.random()* (window.innerHeight-50);
 noBtn.style.left=x+"px";
 noBtn.style.top=y+"px";
 }
 
+/* YES CELEBRATION */
+document.getElementById("yesBtn").addEventListener("click",function(){
+document.getElementById("proposal").style.display="none";
+document.getElementById("celebration").style.display="block";
+startConfetti();
+});
+
 /* Floating Hearts */
-setInterval(()=>{
+function createHeart(){
 const heart=document.createElement("div");
 heart.className="heart";
 heart.innerHTML="❤️";
 heart.style.left=Math.random()*100+"vw";
+heart.style.animationDuration=(Math.random()*4+4)+"s";
 document.body.appendChild(heart);
-setTimeout(()=>heart.remove(),6000);
-},400);
+setTimeout(()=>{heart.remove();},8000);
+}
+setInterval(createHeart,500);
 
-/* Fireworks */
-function fireworks(){
-for(let i=0;i<200;i++){
-const spark=document.createElement("div");
-spark.className="spark";
-spark.style.background=
-["#fff","#ff0","#0ff","#f0f","#0f0"][Math.floor(Math.random()*5)];
-spark.style.left=Math.random()*window.innerWidth+"px";
-spark.style.top=Math.random()*window.innerHeight+"px";
-document.body.appendChild(spark);
-setTimeout(()=>spark.remove(),2000);
+/* Confetti */
+function startConfetti(){
+for(let i=0;i<100;i++){
+const confetti=document.createElement("div");
+confetti.style.position="absolute";
+confetti.style.width="10px";
+confetti.style.height="10px";
+confetti.style.background="hsl("+Math.random()*360+",100%,50%)";
+confetti.style.top=Math.random()*window.innerHeight+"px";
+confetti.style.left=Math.random()*window.innerWidth+"px";
+confetti.style.opacity=1;
+confetti.style.transition="transform 3s ease, opacity 3s ease";
+document.body.appendChild(confetti);
+
+setTimeout(()=>{
+confetti.style.transform="translateY(500px)";
+confetti.style.opacity=0;
+},10);
+
+setTimeout(()=>{confetti.remove();},3000);
 }
 }
+
 </script>
-<script>
-document.addEventListener("DOMContentLoaded", function() {
 
-    const correctPassword = "1108";
-    const unlockBtn = document.getElementById("unlockBtn");
-
-    unlockBtn.addEventListener("click", function() {
-        const entered = prompt("Enter the secret passcode 💌");
-
-        if (entered === correctPassword) {
-            alert("Unlocked 💖");
-            document.body.innerHTML = "<h1 style='text-align:center;margin-top:40vh;font-family:sans-serif;color:#ff4d6d;'>Welcome Yaanu Pie 💘</h1>";
-        } else {
-            alert("Wrong passcode 😏 Try again");
-        }
-    });
-
-});
-</script>
-<style>
-.heart {
-    pointer-events: none !important;
-}
-
-.hearts {
-    pointer-events: none !important;
-}
-</style>
 </body>
 </html>
