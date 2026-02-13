@@ -11,28 +11,41 @@
 body{
 height:100vh;
 overflow:hidden;
-background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+background:radial-gradient(circle at top,#1a0026,#000);
+color:white;
 display:flex;
 justify-content:center;
 align-items:center;
 text-align:center;
-color:white;
 transition:1s;
 }
 
-/* Floating Hearts */
+/* Galaxy stars */
+.star{
+position:absolute;
+width:2px;
+height:2px;
+background:white;
+opacity:0.8;
+animation: twinkle 2s infinite alternate;
+}
+@keyframes twinkle{
+from{opacity:0.2;}
+to{opacity:1;}
+}
+
+/* Floating hearts */
 .heart{
 position:absolute;
 font-size:20px;
-animation:floatUp linear infinite;
 pointer-events:none;
+animation:floatUp linear infinite;
 }
 @keyframes floatUp{
 0%{transform:translateY(100vh);opacity:1;}
 100%{transform:translateY(-10vh);opacity:0;}
 }
 
-/* Screens */
 .screen{
 position:absolute;
 width:100%;
@@ -49,7 +62,7 @@ padding:20px;
 button{
 padding:12px 25px;
 border:none;
-border-radius:25px;
+border-radius:30px;
 font-size:16px;
 cursor:pointer;
 margin:10px;
@@ -59,11 +72,7 @@ transition:0.3s;
 #yesBtn{
 background:#ff4d6d;
 color:white;
-font-size:18px;
-}
-
-#yesBtn:hover{
-transform:scale(1.1);
+font-size:20px;
 }
 
 #noBtn{
@@ -79,25 +88,42 @@ border:none;
 margin:10px;
 text-align:center;
 }
+
+#finalScreen h1{
+font-size:40px;
+animation: glow 1.5s infinite alternate;
+}
+@keyframes glow{
+from{text-shadow:0 0 10px pink;}
+to{text-shadow:0 0 30px red;}
+}
 </style>
 </head>
 
 <body>
 
-<!-- LOCK SCREEN -->
+<!-- LOCK -->
 <div class="screen" id="lockScreen">
-<h1>Enter Secret Passcode 💌</h1>
+<h1>Enter the Secret Code 💌</h1>
 <input type="password" id="passwordInput" placeholder="Passcode">
-<button onclick="unlock()">Unlock ❤️</button>
+<button onclick="unlock()">Unlock 💖</button>
 </div>
 
-<!-- INTRO SCREEN -->
+<!-- INTRO -->
 <div class="screen hidden" id="introScreen">
 <h1 id="typeText"></h1>
-<button onclick="nextScreen()">Continue 💖</button>
+<button onclick="nextScreen()">Continue 🌹</button>
 </div>
 
-<!-- PROPOSAL SCREEN -->
+<!-- QUIZ -->
+<div class="screen hidden" id="quizScreen">
+<h2>Quick Question 😏</h2>
+<p>Who is the cutest person alive?</p>
+<button onclick="correctAnswer()">Yaanu Pie 💖</button>
+<button onclick="wrongAnswer()">Someone Else 🙄</button>
+</div>
+
+<!-- PROPOSAL -->
 <div class="screen hidden" id="proposalScreen">
 <h1>Yaanu Pie 💘</h1>
 <h2>Will you be my Valentine?</h2>
@@ -105,65 +131,24 @@ text-align:center;
 <button id="noBtn">No 🙈</button>
 </div>
 
-<!-- FINAL SCREEN -->
+<!-- FINAL -->
 <div class="screen hidden" id="finalScreen">
-<h1>🎉 SHE SAID YES!!! 🎉</h1>
-<h2>You just made 2026 magical ❤️</h2>
+<h1>🎆 SHE SAID YES!!! 🎆</h1>
+<h2>Forever Starts Now ❤️</h2>
 <button onclick="location.reload()">Replay 🔄</button>
 </div>
 
 <script>
 
-/* PASSCODE */
-function unlock(){
-const correct="1108";
-const entered=document.getElementById("passwordInput").value;
-if(entered===correct){
-document.getElementById("lockScreen").classList.add("hidden");
-document.getElementById("introScreen").classList.remove("hidden");
-typeWriter();
-}else{
-alert("Wrong passcode 😏");
+/* STARS */
+for(let i=0;i<100;i++){
+const star=document.createElement("div");
+star.className="star";
+star.style.left=Math.random()*100+"vw";
+star.style.top=Math.random()*100+"vh";
+star.style.animationDuration=(Math.random()*2+1)+"s";
+document.body.appendChild(star);
 }
-}
-
-/* TYPEWRITER */
-function typeWriter(){
-const text="From the moment I met you... everything changed ❤️";
-let i=0;
-function typing(){
-if(i<text.length){
-document.getElementById("typeText").innerHTML+=text.charAt(i);
-i++;
-setTimeout(typing,50);
-}
-}
-typing();
-}
-
-function nextScreen(){
-document.getElementById("introScreen").classList.add("hidden");
-document.getElementById("proposalScreen").classList.remove("hidden");
-}
-
-/* NO BUTTON RUN */
-const noBtn=document.getElementById("noBtn");
-noBtn.addEventListener("mouseover",moveNo);
-noBtn.addEventListener("click",moveNo);
-
-function moveNo(){
-const x=Math.random()*(window.innerWidth-100);
-const y=Math.random()*(window.innerHeight-50);
-noBtn.style.left=x+"px";
-noBtn.style.top=y+"px";
-}
-
-/* YES BUTTON */
-document.getElementById("yesBtn").addEventListener("click",function(){
-document.getElementById("proposalScreen").classList.add("hidden");
-document.getElementById("finalScreen").classList.remove("hidden");
-startConfetti();
-});
 
 /* HEARTS */
 function createHeart(){
@@ -175,25 +160,92 @@ heart.style.animationDuration=(Math.random()*4+4)+"s";
 document.body.appendChild(heart);
 setTimeout(()=>heart.remove(),8000);
 }
-setInterval(createHeart,500);
+setInterval(createHeart,600);
 
-/* CONFETTI */
-function startConfetti(){
-for(let i=0;i<150;i++){
-const c=document.createElement("div");
-c.style.position="absolute";
-c.style.width="10px";
-c.style.height="10px";
-c.style.background="hsl("+Math.random()*360+",100%,50%)";
-c.style.left=Math.random()*window.innerWidth+"px";
-c.style.top=Math.random()*window.innerHeight+"px";
-c.style.transition="3s";
-document.body.appendChild(c);
+/* PASSCODE */
+function unlock(){
+if(document.getElementById("passwordInput").value==="1108"){
+document.getElementById("lockScreen").classList.add("hidden");
+document.getElementById("introScreen").classList.remove("hidden");
+typeWriter();
+}else{
+alert("Wrong passcode 😏");
+}
+}
+
+/* TYPEWRITER */
+function typeWriter(){
+const text="From the moment I met you, my universe changed forever ❤️";
+let i=0;
+function typing(){
+if(i<text.length){
+document.getElementById("typeText").innerHTML+=text.charAt(i);
+i++;
+setTimeout(typing,40);
+}
+}
+typing();
+}
+
+function nextScreen(){
+document.getElementById("introScreen").classList.add("hidden");
+document.getElementById("quizScreen").classList.remove("hidden");
+}
+
+function correctAnswer(){
+document.getElementById("quizScreen").classList.add("hidden");
+document.getElementById("proposalScreen").classList.remove("hidden");
+}
+
+function wrongAnswer(){
+alert("Wrong answer 😤 Try again.");
+}
+
+/* NO BUTTON TELEPORT */
+const noBtn=document.getElementById("noBtn");
+let yesSize=20;
+
+noBtn.addEventListener("mouseover",moveNo);
+noBtn.addEventListener("click",moveNo);
+
+function moveNo(){
+const x=Math.random()*(window.innerWidth-100);
+const y=Math.random()*(window.innerHeight-50);
+noBtn.style.left=x+"px";
+noBtn.style.top=y+"px";
+
+yesSize+=5;
+document.getElementById("yesBtn").style.fontSize=yesSize+"px";
+}
+
+/* YES */
+document.getElementById("yesBtn").addEventListener("click",function(){
+document.getElementById("proposalScreen").classList.add("hidden");
+document.getElementById("finalScreen").classList.remove("hidden");
+fireworks();
+});
+
+/* FIREWORKS */
+function fireworks(){
+for(let i=0;i<200;i++){
+const f=document.createElement("div");
+f.style.position="absolute";
+f.style.width="6px";
+f.style.height="6px";
+f.style.borderRadius="50%";
+f.style.background="hsl("+Math.random()*360+",100%,50%)";
+f.style.left=window.innerWidth/2+"px";
+f.style.top=window.innerHeight/2+"px";
+document.body.appendChild(f);
+
 setTimeout(()=>{
-c.style.transform="translateY(500px)";
-c.style.opacity="0";
-},50);
-setTimeout(()=>c.remove(),3000);
+f.style.transition="1.5s";
+f.style.left=Math.random()*window.innerWidth+"px";
+f.style.top=Math.random()*window.innerHeight+"px";
+f.style.opacity=0;
+},10);
+
+setTimeout(()=>f.remove(),1500);
 }
 }
 
