@@ -1,46 +1,39 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>For Yaanu Pie ❤️</title>
+<title>For Yaanu Pie 💖</title>
 
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family: 'Arial', sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
 
 body{
 height:100vh;
 overflow:hidden;
-background: linear-gradient(135deg,#ffdde1,#ee9ca7);
+background:linear-gradient(135deg,#ff9a9e,#fad0c4);
 display:flex;
 justify-content:center;
 align-items:center;
 text-align:center;
-color:#fff;
-position:relative;
+color:white;
+transition:1s;
 }
 
 /* Floating Hearts */
 .heart{
 position:absolute;
 font-size:20px;
-animation: floatUp linear infinite;
+animation:floatUp linear infinite;
 pointer-events:none;
 }
-
 @keyframes floatUp{
 0%{transform:translateY(100vh);opacity:1;}
 100%{transform:translateY(-10vh);opacity:0;}
 }
 
-/* Lock Screen */
-#lockScreen{
+/* Screens */
+.screen{
 position:absolute;
 width:100%;
 height:100%;
@@ -48,18 +41,10 @@ display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
-background:linear-gradient(135deg,#ffdde1,#ee9ca7);
-z-index:5;
+padding:20px;
 }
 
-input{
-padding:10px;
-border-radius:20px;
-border:none;
-margin:10px;
-text-align:center;
-font-size:16px;
-}
+.hidden{display:none;}
 
 button{
 padding:12px 25px;
@@ -71,16 +56,10 @@ margin:10px;
 transition:0.3s;
 }
 
-/* Proposal Section */
-#proposal{
-display:none;
-flex-direction:column;
-align-items:center;
-}
-
 #yesBtn{
 background:#ff4d6d;
-color:#fff;
+color:white;
+font-size:18px;
 }
 
 #yesBtn:hover{
@@ -88,79 +67,105 @@ transform:scale(1.1);
 }
 
 #noBtn{
-background:#fff;
+background:white;
 color:#ff4d6d;
 position:absolute;
 }
 
-#celebration{
-display:none;
-font-size:28px;
-animation: pop 1s ease forwards;
-}
-
-@keyframes pop{
-0%{transform:scale(0);}
-100%{transform:scale(1);}
+input{
+padding:10px;
+border-radius:20px;
+border:none;
+margin:10px;
+text-align:center;
 }
 </style>
 </head>
 
 <body>
 
-<div id="lockScreen">
+<!-- LOCK SCREEN -->
+<div class="screen" id="lockScreen">
 <h1>Enter Secret Passcode 💌</h1>
-<input type="password" id="passwordInput" placeholder="Enter passcode">
-<button id="unlockBtn">Unlock ❤️</button>
+<input type="password" id="passwordInput" placeholder="Passcode">
+<button onclick="unlock()">Unlock ❤️</button>
 </div>
 
-<div id="proposal">
-<h1>Yaanu Pie 💖</h1>
-<h2>Will you be my Valentine? 🌹</h2>
+<!-- INTRO SCREEN -->
+<div class="screen hidden" id="introScreen">
+<h1 id="typeText"></h1>
+<button onclick="nextScreen()">Continue 💖</button>
+</div>
+
+<!-- PROPOSAL SCREEN -->
+<div class="screen hidden" id="proposalScreen">
+<h1>Yaanu Pie 💘</h1>
+<h2>Will you be my Valentine?</h2>
 <button id="yesBtn">YES 😍</button>
 <button id="noBtn">No 🙈</button>
 </div>
 
-<div id="celebration">
-🎉 SHE SAID YES!!! 🎉<br>
-You just made 2026 the best year ever ❤️
+<!-- FINAL SCREEN -->
+<div class="screen hidden" id="finalScreen">
+<h1>🎉 SHE SAID YES!!! 🎉</h1>
+<h2>You just made 2026 magical ❤️</h2>
+<button onclick="location.reload()">Replay 🔄</button>
 </div>
 
 <script>
 
 /* PASSCODE */
-document.getElementById("unlockBtn").addEventListener("click",function(){
-const correctPassword="1108";
+function unlock(){
+const correct="1108";
 const entered=document.getElementById("passwordInput").value;
-
-if(entered===correctPassword){
-document.getElementById("lockScreen").style.display="none";
-document.getElementById("proposal").style.display="flex";
+if(entered===correct){
+document.getElementById("lockScreen").classList.add("hidden");
+document.getElementById("introScreen").classList.remove("hidden");
+typeWriter();
 }else{
 alert("Wrong passcode 😏");
 }
-});
+}
 
-/* NO BUTTON RUNS AWAY */
+/* TYPEWRITER */
+function typeWriter(){
+const text="From the moment I met you... everything changed ❤️";
+let i=0;
+function typing(){
+if(i<text.length){
+document.getElementById("typeText").innerHTML+=text.charAt(i);
+i++;
+setTimeout(typing,50);
+}
+}
+typing();
+}
+
+function nextScreen(){
+document.getElementById("introScreen").classList.add("hidden");
+document.getElementById("proposalScreen").classList.remove("hidden");
+}
+
+/* NO BUTTON RUN */
 const noBtn=document.getElementById("noBtn");
-noBtn.addEventListener("mouseover",moveButton);
-noBtn.addEventListener("click",moveButton);
+noBtn.addEventListener("mouseover",moveNo);
+noBtn.addEventListener("click",moveNo);
 
-function moveButton(){
-const x=Math.random()* (window.innerWidth-100);
-const y=Math.random()* (window.innerHeight-50);
+function moveNo(){
+const x=Math.random()*(window.innerWidth-100);
+const y=Math.random()*(window.innerHeight-50);
 noBtn.style.left=x+"px";
 noBtn.style.top=y+"px";
 }
 
-/* YES CELEBRATION */
+/* YES BUTTON */
 document.getElementById("yesBtn").addEventListener("click",function(){
-document.getElementById("proposal").style.display="none";
-document.getElementById("celebration").style.display="block";
+document.getElementById("proposalScreen").classList.add("hidden");
+document.getElementById("finalScreen").classList.remove("hidden");
 startConfetti();
 });
 
-/* Floating Hearts */
+/* HEARTS */
 function createHeart(){
 const heart=document.createElement("div");
 heart.className="heart";
@@ -168,30 +173,27 @@ heart.innerHTML="❤️";
 heart.style.left=Math.random()*100+"vw";
 heart.style.animationDuration=(Math.random()*4+4)+"s";
 document.body.appendChild(heart);
-setTimeout(()=>{heart.remove();},8000);
+setTimeout(()=>heart.remove(),8000);
 }
 setInterval(createHeart,500);
 
-/* Confetti */
+/* CONFETTI */
 function startConfetti(){
-for(let i=0;i<100;i++){
-const confetti=document.createElement("div");
-confetti.style.position="absolute";
-confetti.style.width="10px";
-confetti.style.height="10px";
-confetti.style.background="hsl("+Math.random()*360+",100%,50%)";
-confetti.style.top=Math.random()*window.innerHeight+"px";
-confetti.style.left=Math.random()*window.innerWidth+"px";
-confetti.style.opacity=1;
-confetti.style.transition="transform 3s ease, opacity 3s ease";
-document.body.appendChild(confetti);
-
+for(let i=0;i<150;i++){
+const c=document.createElement("div");
+c.style.position="absolute";
+c.style.width="10px";
+c.style.height="10px";
+c.style.background="hsl("+Math.random()*360+",100%,50%)";
+c.style.left=Math.random()*window.innerWidth+"px";
+c.style.top=Math.random()*window.innerHeight+"px";
+c.style.transition="3s";
+document.body.appendChild(c);
 setTimeout(()=>{
-confetti.style.transform="translateY(500px)";
-confetti.style.opacity=0;
-},10);
-
-setTimeout(()=>{confetti.remove();},3000);
+c.style.transform="translateY(500px)";
+c.style.opacity="0";
+},50);
+setTimeout(()=>c.remove(),3000);
 }
 }
 
